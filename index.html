@@ -5,45 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário StarCapas</title>
     <style>
-        /* Importa a fonte Montserrat do Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
         :root {
             --gp-primary-color: #FF6B00;
             --gp-input-text-color: #E0E0E0;
             --gp-input-placeholder-color: rgba(224, 224, 224, 0.7);
-            /* FUNDO DO INPUT MAIS TRANSPARENTE E BLUR AUMENTADO (TESTE) */
             --gp-input-bg-color: rgba(255, 255, 255, 0.05); 
             --gp-input-border-color: rgba(255, 255, 255, 0.25);
             --gp-input-focus-border-color: rgba(255, 107, 0, 0.7);
             --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.25);
-
+            
             --gp-label-color-initial: var(--gp-input-placeholder-color);
             --gp-label-color-float: var(--gp-primary-color);
-
+            
             --gp-error-color: #FFB3B3; 
 
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
-            --gp-field-spacing: 10px; /* Espaçamento reduzido entre campos */
+            /* ESPAÇAMENTO ENTRE CAMPOS MAIS REDUZIDO AINDA */
+            --gp-field-spacing: 8px; 
         }
 
-        /* Garante que a página HTML e o body sejam transparentes para o iframe */
         html, body {
-            background: transparent !important; /* Importante para o iframe */
+            background: transparent !important;
             margin: 0;
             padding: 0;
             font-family: var(--gp-font-family);
         }
 
         .gp-form-wrapper {
-            /* A fonte já está no body, mas pode ser reforçada aqui se necessário */
-            /* font-family: var(--gp-font-family); */
-            background: transparent; /* Wrapper do formulário também transparente */
+            background: transparent; 
             width: 100%;
-            max-width: 380px; /* Ou a largura que você configurou no GreatPages para a coluna */
-            margin: 0 auto; /* Centraliza se a página externa for mais larga */
-            padding: 10px; /* Um padding para não colar nas bordas do iframe se a largura for exata */
+            max-width: 380px; 
+            margin: 0 auto; 
+            padding: 10px; 
             box-sizing: border-box;
         }
 
@@ -59,7 +55,8 @@
         .gp-form-label {
             position: absolute;
             left: 17px;
-            top: 13px;
+            /* AJUSTADO PARA O NOVO TAMANHO DO CAMPO */
+            top: 16px; 
             font-size: 15px;
             color: var(--gp-label-color-initial);
             pointer-events: none;
@@ -69,9 +66,10 @@
 
         .gp-form-input {
             width: 100%;
-            padding: 12px 16px;
-            padding-top: 18px;
-            padding-bottom: 6px;
+            /* PADDING AJUSTADO PARA AUMENTAR ALTURA DO CAMPO */
+            padding: 12px 16px; /* padding-left e padding-right */
+            padding-top: 22px;   /* Aumentado para mais altura e espaço para label */
+            padding-bottom: 10px;  /* Aumentado para mais altura */
             font-size: 15px;
             font-family: var(--gp-font-family);
             color: var(--gp-input-text-color);
@@ -79,18 +77,19 @@
             border: 1px solid var(--gp-input-border-color);
             border-radius: var(--gp-border-radius);
             transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
-
-            -webkit-backdrop-filter: blur(40px); 
-            backdrop-filter: blur(40px);
+            
+            /* BLUR SIGNIFICATIVAMENTE AUMENTADO */
+            -webkit-backdrop-filter: blur(50px); 
+            backdrop-filter: blur(50px);
         }
-
+        
         .gp-form-input:focus + .gp-form-label,
         .gp-form-input:not(:placeholder-shown) + .gp-form-label {
-            top: -2px;
+            top: 4px; /* Ajustado para subir um pouco mais acima do campo mais alto */
             font-size: 11px;
             color: var(--gp-label-color-float);
         }
-
+        
         .gp-form-input::placeholder {
             color: transparent; 
         }
@@ -121,7 +120,7 @@
 
         .gp-submit-button {
             width: 100%;
-            padding: 13px 20px;
+            padding: 14px 20px; /* Aumentei um pouco o padding vertical do botão para acompanhar os campos */
             font-size: 16px;
             font-family: var(--gp-font-family);
             font-weight: 600;
@@ -137,7 +136,7 @@
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 15px 0 rgba(255, 107, 0, 0.3);
-            margin-top: 12px; 
+            margin-top: 10px; /* Ajustado para o novo espaçamento */
         }
 
         .gp-submit-button:hover {
@@ -145,6 +144,7 @@
             box-shadow: 0 6px 20px 0 rgba(255, 107, 0, 0.45);
         }
 
+        /* ... restante do CSS e todo o HTML e JavaScript permanecem os mesmos da resposta anterior ... */
         .gp-submit-button:active {
             transform: scale(0.97);
         }
@@ -307,24 +307,50 @@
                     const originalIcon = gpSubmitBtn.querySelector('.icon');
                     if(originalIcon) originalIcon.style.display = 'none';
 
-                    setTimeout(() => {
-                        // Lembre-se de configurar como este formulário enviará os dados
-                        // ex: usando Formspree, Netlify Forms, ou seu próprio backend/API.
-                        console.log('Formulário enviado (simulação):', {
-                            fullName: gpFullNameInput ? gpFullNameInput.value : '',
-                            email: gpEmailInput ? gpEmailInput.value : '',
-                            whatsapp: gpWhatsappInput ? gpWhatsappInput.value : ''
+                    const formData = {
+                        fullName: gpFullNameInput ? gpFullNameInput.value.trim() : '',
+                        email: gpEmailInput ? gpEmailInput.value.trim() : '',
+                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : ''
+                    };
+
+                    const webhookUrl = 'https://leaomarketeria.app.n8n.cloud/webhook-test/receber-lead-catalogo-starcapas';
+
+                    fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text(); 
+                        }
+                        return response.text().then(text => {
+                           throw new Error(`Erro do webhook: ${response.status} ${response.statusText}. Detalhes: ${text}`);
                         });
+                    })
+                    .then(data => {
+                        console.log('Sucesso no Webhook:', data);
+                        alert('Inscrição realizada com sucesso!');
                         gpForm.reset();
                         if (gpFullNameInput) gpClearError('gpFullName');
                         if (gpEmailInput) gpClearError('gpEmail');
                         if (gpWhatsappInput) gpClearError('gpWhatsapp');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao enviar para Webhook:', error);
+                        alert(`Ocorreu um erro ao enviar sua inscrição: ${error.message}. Tente novamente.`);
+                    })
+                    .finally(() => {
                         if (gpSubmitBtn) {
                             gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
                             gpSubmitBtn.disabled = false;
                         }
-                        alert('Inscrição realizada com sucesso! (Simulação)');
-                    }, 1500);
+                    });
+                } else if (!isValid && gpSubmitBtn) {
+                     gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
+                     gpSubmitBtn.disabled = false;
                 }
             });
         }
