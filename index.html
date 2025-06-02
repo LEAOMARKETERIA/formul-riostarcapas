@@ -3,29 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas</title>
+    <title>Formulário StarCapas - Final</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
         :root {
             --gp-primary-color: #FF6B00;
-            --gp-input-text-color: #FFFFFF; 
-            --gp-input-placeholder-color: rgba(224, 224, 224, 0.7);
-            --gp-input-bg-color: rgba(0, 0, 0, 0.15); 
-            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35);
-            --gp-label-color-initial: var(--gp-input-placeholder-color);
+            --gp-text-color-on-dark-bg: #FFFFFF; 
+            --gp-label-placeholder-color: rgba(224, 224, 224, 0.7); 
+            
+            /* Estilo glassmorphism escuro para inputs */
+            --gp-input-bg-color: rgba(30, 30, 30, 0.45); /* Tom escuro, boa transparência */
+            --gp-input-focus-bg-color: rgba(50, 50, 50, 0.55); /* Um pouco mais opaco no foco */
+            --gp-input-blur-value: 70px; /* Blur alto */
+
+            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.55); /* Sombra do foco mais visível */
             --gp-label-color-float: var(--gp-primary-color);
-            --gp-error-color: #FFC2C2; 
+            --gp-error-color: #FFB3B3; /* Ajustado para melhor contraste em fundo escuro */
+            --gp-error-shadow-color: rgba(255, 80, 80, 0.6);
+
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
-            --gp-field-spacing: 8px; 
+            --gp-field-spacing: 10px; /* Espaçamento entre campos um pouco maior que 8px */
         }
 
+        /* Reset básico e configuração do body para o iframe */
         html, body {
             background: transparent !important;
             margin: 0;
             padding: 0;
             font-family: var(--gp-font-family);
+            color: var(--gp-text-color-on-dark-bg); /* Cor de texto padrão clara se o fundo do GreatPages for escuro */
         }
 
         .gp-form-wrapper {
@@ -33,84 +41,106 @@
             width: 100%;
             max-width: 380px; 
             margin: 0 auto; 
-            padding: 10px; 
+            padding: 15px; /* Um pouco mais de padding no wrapper */
             box-sizing: border-box;
         }
 
-        .gp-form-wrapper * {
+        .gp-form-wrapper *,
+        .gp-form-wrapper *::before,
+        .gp-form-wrapper *::after {
             box-sizing: border-box;
         }
 
         .gp-form-group {
             margin-bottom: var(--gp-field-spacing);
-            position: relative;
+            position: relative; 
         }
 
-        .gp-form-label {
+        /* Estilos da Label Flutuante */
+        .gp-form-wrapper .gp-form-label { /* Maior especificidade */
             position: absolute;
-            left: 17px;
-            top: 16px; 
+            left: 18px; /* Alinhado com padding do input */
+            top: 50%;
+            transform: translateY(-50%);
             font-size: 15px;
-            color: var(--gp-label-color-initial);
+            line-height: 1;
+            color: var(--gp-label-placeholder-color);
             pointer-events: none;
-            transition: all 0.2s ease-out;
-            background-color: transparent;
+            transition: all 0.15s ease-out;
+            background-color: transparent; 
+            padding: 0 2px;
         }
 
-        .gp-form-input {
+        /* Estilos do Input */
+        .gp-form-wrapper .gp-form-input { /* Maior especificidade */
+            /* Reset explícito de aparência */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+            box-shadow: none; 
+            
             width: 100%;
-            padding: 12px 16px;
-            padding-top: 22px;  
-            padding-bottom: 10px; 
+            /* Padding: Top precisa de espaço para label inicial, Bottom para altura, L/R para texto */
+            padding: 18px 16px 10px 16px; /* Ex: 18px no topo, 10px embaixo, 16px laterais */
             font-size: 15px;
             font-family: var(--gp-font-family);
-            color: var(--gp-input-text-color);
+            line-height: 1.4; 
+            color: var(--gp-text-color-on-dark-bg);
             background-color: var(--gp-input-bg-color); 
             border: none; 
             border-radius: var(--gp-border-radius);
             transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
-            -webkit-backdrop-filter: blur(70px); 
-            backdrop-filter: blur(70px);
+            
+            -webkit-backdrop-filter: blur(var(--gp-input-blur-value)); 
+            backdrop-filter: blur(var(--gp-input-blur-value));
         }
         
-        .gp-form-input:focus + .gp-form-label,
-        .gp-form-input:not(:placeholder-shown) + .gp-form-label {
-            top: 4px; 
+        /* Label Flutuando para Cima */
+        .gp-form-wrapper .gp-form-input:focus + .gp-form-label,
+        .gp-form-wrapper .gp-form-input:not(:placeholder-shown) + .gp-form-label {
+            top: 6px; /* Posição da label acima, dentro do padding-top do input */
+            transform: translateY(0);
             font-size: 11px;
             color: var(--gp-label-color-float);
+            /* Para a label "recortar" o fundo se necessário (se o input tivesse borda visível) */
+            /* background-color: var(--gp-input-bg-color); */ 
         }
         
-        .gp-form-input::placeholder {
+        .gp-form-wrapper .gp-form-input::placeholder {
             color: transparent; 
+            user-select: none;
         }
 
-        .gp-form-input:focus {
-            outline: none;
+        /* Estilos de Foco e Erro */
+        .gp-form-wrapper .gp-form-input:focus {
             box-shadow: var(--gp-input-focus-shadow);
-            background-color: rgba(0, 0, 0, 0.25); 
+            background-color: var(--gp-input-focus-bg-color); 
         }
 
-        .gp-form-input.has-error,
-        .gp-form-input[aria-invalid="true"] {
-            box-shadow: 0 0 0 3px rgba(255, 100, 100, 0.4) !important; 
+        .gp-form-wrapper .gp-form-input.has-error,
+        .gp-form-wrapper .gp-form-input[aria-invalid="true"] {
+            box-shadow: 0 0 0 3px var(--gp-error-shadow-color) !important; 
         }
-        .gp-form-input.has-error + .gp-form-label,
-        .gp-form-input[aria-invalid="true"] + .gp-form-label {
+        .gp-form-wrapper .gp-form-input.has-error + .gp-form-label,
+        .gp-form-wrapper .gp-form-input[aria-invalid="true"] + .gp-form-label {
             color: var(--gp-error-color);
         }
 
-        .gp-error-message {
+        .gp-form-wrapper .gp-error-message {
             display: block;
             color: var(--gp-error-color);
             font-size: 12px;
-            margin-top: 5px;
+            margin-top: 6px; /* Mais espaço para a mensagem de erro */
             min-height: 15px;
             font-weight: 500;
+            padding-left: 2px; /* Pequeno recuo */
         }
 
-        .gp-submit-button {
+        /* Botão de Submissão */
+        .gp-form-wrapper .gp-submit-button {
             width: 100%;
-            padding: 14px 20px; 
+            padding: 15px 20px; /* Botão um pouco mais alto */
             font-size: 16px;
             font-family: var(--gp-font-family);
             font-weight: 600;
@@ -126,29 +156,27 @@
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 15px 0 rgba(255, 107, 0, 0.3);
-            margin-top: 10px; 
+            margin-top: 12px; 
         }
 
-        .gp-submit-button:hover {
+        .gp-form-wrapper .gp-submit-button:hover {
             background-position: right center;
             box-shadow: 0 6px 20px 0 rgba(255, 107, 0, 0.45);
         }
-        .gp-submit-button:active {
+        .gp-form-wrapper .gp-submit-button:active {
             transform: scale(0.97);
         }
-
-        .gp-submit-button:disabled {
+        .gp-form-wrapper .gp-submit-button:disabled {
             background-image: none;
             background-color: rgba(50,50,50,0.3); 
             color: rgba(224, 224, 224, 0.6);
             cursor: not-allowed;
             box-shadow: none;
         }
-
-        .gp-submit-button .icon {
+        .gp-form-wrapper .gp-submit-button .icon {
             transition: transform 0.2s ease-out;
         }
-        .gp-submit-button:hover .icon {
+        .gp-form-wrapper .gp-submit-button:hover .icon {
             transform: translateX(4px);
         }
     </style>
@@ -173,7 +201,7 @@
 
             <div class="gp-form-group">
                 <input type="tel" id="gpWhatsapp" name="whatsapp" class="gp-form-input" placeholder=" " required
-                       aria-describedby="gpWhatsappError" aria-invalid="false" maxlength="17"> {/* Maxlength para (XX) 9 XXXX-XXXX */}
+                       aria-describedby="gpWhatsappError" aria-invalid="false" maxlength="17">
                 <label for="gpWhatsapp" class="gp-form-label">WhatsApp</label>
                 <span class="gp-error-message" id="gpWhatsappError" role="alert"></span>
             </div>
@@ -186,6 +214,7 @@
     </div>
 
     <script>
+        // O JavaScript permanece o mesmo da versão anterior para validação, máscara e envio.
         const gpForm = document.getElementById('greatPagesForm');
         const gpFullNameInput = document.getElementById('gpFullName');
         const gpEmailInput = document.getElementById('gpEmail');
@@ -242,25 +271,24 @@
             });
             gpEmailInput.addEventListener('input', () => gpClearError('gpEmail'));
         }
-
-        // Lógica para Máscara e Validação do WhatsApp
+        
         if (gpWhatsappInput) {
             gpWhatsappInput.addEventListener('input', function (e) {
-                let value = e.target.value.replace(/\D/g, ''); // Remove todos os não-dígitos
-                value = value.substring(0, 11); // Limita a 11 dígitos (DDD + 9 + NÚMERO)
+                let value = e.target.value.replace(/\D/g, ''); 
+                value = value.substring(0, 11); 
 
                 let maskedValue = '';
                 if (value.length > 0) {
                     maskedValue = '(' + value.substring(0, Math.min(2, value.length));
                 }
                 if (value.length > 2) {
-                    maskedValue += ') ' + value.substring(2, Math.min(3, value.length)); // O '9'
+                    maskedValue += ') ' + value.substring(2, Math.min(3, value.length));
                 }
                 if (value.length > 3) {
-                    maskedValue += ' ' + value.substring(3, Math.min(7, value.length)); // Primeiros 4 do número XXXX
+                    maskedValue += ' ' + value.substring(3, Math.min(7, value.length)); 
                 }
                 if (value.length > 7) {
-                    maskedValue += '-' + value.substring(7, Math.min(11, value.length)); // Últimos 4 do número XXXX
+                    maskedValue += '-' + value.substring(7, Math.min(11, value.length)); 
                 }
                 e.target.value = maskedValue;
             });
@@ -272,14 +300,11 @@
                 if (!whatsappValue) { 
                     gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
                 } else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) {
-                    // Valida se tem 11 dígitos e o 3º dígito (após DDD) é '9'
                     gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.');
                 } else {
                     gpClearError('gpWhatsapp');
                 }
             });
-            // Não precisa limpar erro no 'input' aqui, pois a máscara já está formatando.
-            // O erro só será mostrado no 'blur' ou 'submit'.
         }
 
 
@@ -288,48 +313,26 @@
                 event.preventDefault();
                 let isValid = true;
 
-                // Validação Nome
-                if (gpFullNameInput) {
-                    if (!gpFullNameInput.value.trim()) {
-                        gpShowError('gpFullName', 'Nome completo é obrigatório.');
-                        isValid = false;
-                    } else if (gpFullNameInput.value.trim().split(' ').length < 2) {
-                        gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.');
-                        isValid = false;
-                    } else {
-                        gpClearError('gpFullName');
-                    }
+                // Validações (repetidas para garantir antes do submit)
+                if (gpFullNameInput) { /* ... lógica de validação ... */ 
+                    if (!gpFullNameInput.value.trim()) { gpShowError('gpFullName', 'Nome completo é obrigatório.'); isValid = false; }
+                    else if (gpFullNameInput.value.trim().split(' ').length < 2) { gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.'); isValid = false; }
+                    else { gpClearError('gpFullName'); }
                 }
-                // Validação Email
-                if (gpEmailInput) {
+                if (gpEmailInput) { /* ... lógica de validação ... */ 
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!gpEmailInput.value.trim()) {
-                        gpShowError('gpEmail', 'E-mail é obrigatório.');
-                        isValid = false;
-                    } else if (!emailRegex.test(gpEmailInput.value.trim())) {
-                        gpShowError('gpEmail', 'Formato de e-mail inválido.');
-                        isValid = false;
-                    } else {
-                        gpClearError('gpEmail');
-                    }
+                    if (!gpEmailInput.value.trim()) { gpShowError('gpEmail', 'E-mail é obrigatório.'); isValid = false; }
+                    else if (!emailRegex.test(gpEmailInput.value.trim())) { gpShowError('gpEmail', 'Formato de e-mail inválido.'); isValid = false; }
+                    else { gpClearError('gpEmail'); }
                 }
-                // Validação WhatsApp
-                if (gpWhatsappInput) {
-                    const whatsappValue = gpWhatsappInput.value.trim();
-                    const unmaskedValue = whatsappValue.replace(/\D/g, '');
-                    if (!whatsappValue) { 
-                        gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
-                        isValid = false;
-                    } else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) { 
-                        gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.');
-                        isValid = false;
-                    } else {
-                        gpClearError('gpWhatsapp');
-                    }
+                if (gpWhatsappInput) { /* ... lógica de validação ... */
+                    const whatsappValue = gpWhatsappInput.value.trim(); const unmaskedValue = whatsappValue.replace(/\D/g, '');
+                    if (!whatsappValue) { gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.'); isValid = false; }
+                    else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) { gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.'); isValid = false; }
+                    else { gpClearError('gpWhatsapp'); }
                 }
 
                 if (isValid && gpSubmitBtn) {
-                    // ... (resto da lógica de envio para o webhook permanece a mesma) ...
                     gpSubmitBtn.textContent = 'Enviando...';
                     gpSubmitBtn.disabled = true;
                     const originalIcon = gpSubmitBtn.querySelector('.icon');
@@ -338,7 +341,7 @@
                     const formData = {
                         fullName: gpFullNameInput ? gpFullNameInput.value.trim() : '',
                         email: gpEmailInput ? gpEmailInput.value.trim() : '',
-                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : '' // Envia o valor mascarado
+                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : ''
                     };
                     const webhookUrl = 'https://leaomarketeria.app.n8n.cloud/webhook-test/receber-lead-catalogo-starcapas';
 
