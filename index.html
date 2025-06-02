@@ -1,57 +1,356 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" style="background: transparent;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste de Blur Interno no iFrame</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <title>Formulário StarCapas</title>
     <style>
-        body {
-            /* Imagem de fundo diretamente no body do iframe para este teste */
-            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80'); /* Imagem de paisagem de exemplo */
-            background-size: cover;
-            background-position: center center;
-            min-height: 100vh; /* Garante que o fundo cubra a tela do iframe */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+        :root {
+            --gp-primary-color: #FF6B00;
+            --gp-input-text-color: #FFFFFF; /* Texto branco para bom contraste com fundo escuro do input */
+            --gp-input-placeholder-color: rgba(224, 224, 224, 0.7);
+            
+            /* Input com fundo escuro e transparente, similar ao teste bem-sucedido */
+            --gp-input-bg-color: rgba(0, 0, 0, 0.15); 
+            
+            --gp-input-focus-border-color: rgba(255, 107, 0, 0.7);
+            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35); /* Sombra do foco um pouco mais visível */
+            
+            --gp-label-color-initial: var(--gp-input-placeholder-color);
+            --gp-label-color-float: var(--gp-primary-color);
+            
+            --gp-error-color: #FFC2C2; /* Erro um pouco mais claro para fundos escuros */
+
+            --gp-font-family: 'Montserrat', sans-serif;
+            --gp-border-radius: 10px;
+            --gp-field-spacing: 8px; 
+        }
+
+        html, body {
+            background: transparent !important;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Montserrat', sans-serif;
+            padding: 0;
+            font-family: var(--gp-font-family);
+        }
+
+        .gp-form-wrapper {
+            background: transparent; 
+            width: 100%;
+            max-width: 380px; 
+            margin: 0 auto; 
+            padding: 10px; 
             box-sizing: border-box;
         }
 
-        .test-input-container {
-            width: 100%;
-            max-width: 350px; /* Largura do container do input */
+        .gp-form-wrapper * {
+            box-sizing: border-box;
         }
 
-        .test-input {
+        .gp-form-group {
+            margin-bottom: var(--gp-field-spacing);
+            position: relative;
+        }
+
+        .gp-form-label {
+            position: absolute;
+            left: 17px;
+            top: 16px; 
+            font-size: 15px;
+            color: var(--gp-label-color-initial);
+            pointer-events: none;
+            transition: all 0.2s ease-out;
+            background-color: transparent;
+        }
+
+        .gp-form-input {
             width: 100%;
-            padding: 25px 20px; /* Padding para deixar o campo alto */
+            padding: 12px 16px;
+            padding-top: 22px;  
+            padding-bottom: 10px; 
+            font-size: 15px;
+            font-family: var(--gp-font-family);
+            color: var(--gp-input-text-color);
+            background-color: var(--gp-input-bg-color); 
+            
+            border: none; 
+            border-radius: var(--gp-border-radius);
+            transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+            
+            -webkit-backdrop-filter: blur(30px); /* Um blur forte, mas não extremo */
+            backdrop-filter: blur(30px);
+        }
+        
+        .gp-form-input:focus + .gp-form-label,
+        .gp-form-input:not(:placeholder-shown) + .gp-form-label {
+            top: 4px; 
+            font-size: 11px;
+            color: var(--gp-label-color-float);
+        }
+        
+        .gp-form-input::placeholder {
+            color: transparent; 
+        }
+
+        .gp-form-input:focus {
+            outline: none;
+            box-shadow: var(--gp-input-focus-shadow);
+            background-color: rgba(0, 0, 0, 0.25); /* Fundo do input um pouco mais escuro/opaco no foco */
+        }
+
+        .gp-form-input.has-error {
+            box-shadow: 0 0 0 3px rgba(255, 100, 100, 0.4) !important; 
+        }
+        .gp-form-input.has-error + .gp-form-label {
+            color: var(--gp-error-color);
+        }
+
+        .gp-error-message {
+            display: block;
+            color: var(--gp-error-color);
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 15px;
+            font-weight: 500;
+        }
+
+        .gp-submit-button {
+            width: 100%;
+            padding: 14px 20px; 
             font-size: 16px;
-            color: #FFFFFF; /* Texto branco para contraste com fundos escuros/complexos */
-            
-            /* Fundo e Blur */
-            background-color: rgba(0, 0, 0, 0.15); /* Fundo escuro e bem transparente */
-            -webkit-backdrop-filter: blur(20px); /* Valor de blur para ser perceptível */
-            backdrop-filter: blur(20px);
-            
-            border: none; /* SEM BORDAS */
-            border-radius: 8px;
-            box-sizing: border-box;
+            font-family: var(--gp-font-family);
+            font-weight: 600;
+            color: #fff;
+            background-image: linear-gradient(to right, var(--gp-primary-color) 0%, #E65C00 50%, var(--gp-primary-color) 100%);
+            background-size: 200% auto;
+            border: none;
+            border-radius: var(--gp-border-radius);
+            cursor: pointer;
+            transition: background-position 0.4s ease-out, transform 0.15s ease-out, box-shadow 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px 0 rgba(255, 107, 0, 0.3);
+            margin-top: 10px; 
         }
 
-        .test-input::placeholder {
-            color: rgba(255,255,255,0.7);
+        .gp-submit-button:hover {
+            background-position: right center;
+            box-shadow: 0 6px 20px 0 rgba(255, 107, 0, 0.45);
+        }
+        .gp-submit-button:active {
+            transform: scale(0.97);
+        }
+
+        .gp-submit-button:disabled {
+            background-image: none;
+            background-color: rgba(50,50,50,0.3); /* Fundo desabilitado um pouco mais escuro */
+            color: rgba(224, 224, 224, 0.6);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .gp-submit-button .icon {
+            transition: transform 0.2s ease-out;
+        }
+        .gp-submit-button:hover .icon {
+            transform: translateX(4px);
         }
     </style>
 </head>
 <body>
-    <div class="test-input-container">
-        <input type="text" class="test-input" placeholder="Teste de campo com blur...">
+
+    <div class="gp-form-wrapper">
+        <form id="greatPagesForm">
+            <div class="gp-form-group">
+                <input type="text" id="gpFullName" name="fullName" class="gp-form-input" placeholder=" " required>
+                <label for="gpFullName" class="gp-form-label">Nome Completo</label>
+                <span class="gp-error-message" id="gpFullNameError"></span>
+            </div>
+
+            <div class="gp-form-group">
+                <input type="email" id="gpEmail" name="email" class="gp-form-input" placeholder=" " required>
+                <label for="gpEmail" class="gp-form-label">E-mail</label>
+                <span class="gp-error-message" id="gpEmailError"></span>
+            </div>
+
+            <div class="gp-form-group">
+                <input type="tel" id="gpWhatsapp" name="whatsapp" class="gp-form-input" placeholder=" " required>
+                <label for="gpWhatsapp" class="gp-form-label">WhatsApp</label>
+                <span class="gp-error-message" id="gpWhatsappError"></span>
+            </div>
+
+            <button type="submit" class="gp-submit-button" id="gpSubmitBtn">
+                Garantir Minha Vaga
+                <span class="icon">→</span>
+            </button>
+        </form>
     </div>
+
+    <script>
+        // O JavaScript para validação e envio para o webhook permanece o mesmo da versão anterior
+        const gpForm = document.getElementById('greatPagesForm');
+        const gpFullNameInput = document.getElementById('gpFullName');
+        const gpEmailInput = document.getElementById('gpEmail');
+        const gpWhatsappInput = document.getElementById('gpWhatsapp');
+        const gpSubmitBtn = document.getElementById('gpSubmitBtn');
+
+        function gpShowError(inputId, message) {
+            const errorElement = document.getElementById(inputId + 'Error');
+            const inputElement = document.getElementById(inputId);
+            if (inputElement) inputElement.classList.add('has-error');
+            if (errorElement) errorElement.textContent = message;
+        }
+
+        function gpClearError(inputId) {
+            const errorElement = document.getElementById(inputId + 'Error');
+            const inputElement = document.getElementById(inputId);
+            if (inputElement) inputElement.classList.remove('has-error');
+            if (errorElement) errorElement.textContent = '';
+        }
+
+        if (gpFullNameInput) {
+            gpFullNameInput.addEventListener('blur', () => {
+                if (!gpFullNameInput.value.trim()) {
+                    gpShowError('gpFullName', 'Nome completo é obrigatório.');
+                } else if (gpFullNameInput.value.trim().split(' ').length < 2 && gpFullNameInput.value.trim().length > 0) {
+                    gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.');
+                } else {
+                    gpClearError('gpFullName');
+                }
+            });
+            gpFullNameInput.addEventListener('input', () => gpClearError('gpFullName'));
+        }
+
+        if (gpEmailInput) {
+            gpEmailInput.addEventListener('blur', () => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!gpEmailInput.value.trim()) {
+                    gpShowError('gpEmail', 'E-mail é obrigatório.');
+                } else if (!emailRegex.test(gpEmailInput.value.trim())) {
+                    gpShowError('gpEmail', 'Formato de e-mail inválido.');
+                } else {
+                    gpClearError('gpEmail');
+                }
+            });
+            gpEmailInput.addEventListener('input', () => gpClearError('gpEmail'));
+        }
+
+        if (gpWhatsappInput) {
+            gpWhatsappInput.addEventListener('blur', () => {
+                const whatsappValue = gpWhatsappInput.value.trim();
+                const phoneRegex = /^[+]?[(]?[0-9]{2}[)]?[-\s.]?[0-9]{4,5}[-\s.]?[0-9]{4}$/im; 
+                if (!whatsappValue) { 
+                    gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
+                } else if (!phoneRegex.test(whatsappValue)) {
+                    gpShowError('gpWhatsapp', 'Formato de WhatsApp inválido.');
+                } else {
+                    gpClearError('gpWhatsapp');
+                }
+            });
+            gpWhatsappInput.addEventListener('input', () => gpClearError('gpWhatsapp'));
+        }
+
+        if (gpForm) {
+            gpForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let isValid = true;
+
+                if (gpFullNameInput) {
+                    if (!gpFullNameInput.value.trim()) {
+                        gpShowError('gpFullName', 'Nome completo é obrigatório.');
+                        isValid = false;
+                    } else if (gpFullNameInput.value.trim().split(' ').length < 2) {
+                        gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.');
+                        isValid = false;
+                    } else {
+                        gpClearError('gpFullName');
+                    }
+                }
+
+                if (gpEmailInput) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!gpEmailInput.value.trim()) {
+                        gpShowError('gpEmail', 'E-mail é obrigatório.');
+                        isValid = false;
+                    } else if (!emailRegex.test(gpEmailInput.value.trim())) {
+                        gpShowError('gpEmail', 'Formato de e-mail inválido.');
+                        isValid = false;
+                    } else {
+                        gpClearError('gpEmail');
+                    }
+                }
+
+                if (gpWhatsappInput) {
+                    const whatsappValue = gpWhatsappInput.value.trim();
+                    const phoneRegex = /^[+]?[(]?[0-9]{2}[)]?[-\s.]?[0-9]{4,5}[-\s.]?[0-9]{4}$/im;
+                    if (!whatsappValue) { 
+                        gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
+                        isValid = false;
+                    } else if (!phoneRegex.test(whatsappValue)) { 
+                        gpShowError('gpWhatsapp', 'Formato de WhatsApp inválido.');
+                        isValid = false;
+                    } else {
+                        gpClearError('gpWhatsapp');
+                    }
+                }
+
+                if (isValid && gpSubmitBtn) {
+                    gpSubmitBtn.textContent = 'Enviando...';
+                    gpSubmitBtn.disabled = true;
+                    const originalIcon = gpSubmitBtn.querySelector('.icon');
+                    if(originalIcon) originalIcon.style.display = 'none';
+
+                    const formData = {
+                        fullName: gpFullNameInput ? gpFullNameInput.value.trim() : '',
+                        email: gpEmailInput ? gpEmailInput.value.trim() : '',
+                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : ''
+                    };
+
+                    const webhookUrl = 'https://leaomarketeria.app.n8n.cloud/webhook-test/receber-lead-catalogo-starcapas';
+
+                    fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text(); 
+                        }
+                        return response.text().then(text => {
+                           throw new Error(`Erro do webhook: ${response.status} ${response.statusText}. Detalhes: ${text}`);
+                        });
+                    })
+                    .then(data => {
+                        console.log('Sucesso no Webhook:', data);
+                        alert('Inscrição realizada com sucesso!');
+                        gpForm.reset();
+                        if (gpFullNameInput) gpClearError('gpFullName');
+                        if (gpEmailInput) gpClearError('gpEmail');
+                        if (gpWhatsappInput) gpClearError('gpWhatsapp');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao enviar para Webhook:', error);
+                        alert(`Ocorreu um erro ao enviar sua inscrição: ${error.message}. Tente novamente.`);
+                    })
+                    .finally(() => {
+                        if (gpSubmitBtn) {
+                            gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
+                            gpSubmitBtn.disabled = false;
+                        }
+                    });
+                } else if (!isValid && gpSubmitBtn) {
+                     gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
+                     gpSubmitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>
