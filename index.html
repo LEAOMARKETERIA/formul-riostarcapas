@@ -9,20 +9,14 @@
 
         :root {
             --gp-primary-color: #FF6B00;
-            --gp-input-text-color: #FFFFFF; /* Texto branco para bom contraste com fundo escuro do input */
+            --gp-input-text-color: #FFFFFF; 
             --gp-input-placeholder-color: rgba(224, 224, 224, 0.7);
-            
-            /* Input com fundo escuro e transparente, similar ao teste bem-sucedido */
             --gp-input-bg-color: rgba(0, 0, 0, 0.15); 
-            
             --gp-input-focus-border-color: rgba(255, 107, 0, 0.7);
-            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35); /* Sombra do foco um pouco mais visível */
-            
+            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35);
             --gp-label-color-initial: var(--gp-input-placeholder-color);
             --gp-label-color-float: var(--gp-primary-color);
-            
-            --gp-error-color: #FFC2C2; /* Erro um pouco mais claro para fundos escuros */
-
+            --gp-error-color: #FFC2C2; 
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
             --gp-field-spacing: 8px; 
@@ -78,8 +72,9 @@
             border-radius: var(--gp-border-radius);
             transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
             
-            -webkit-backdrop-filter: blur(30px); /* Um blur forte, mas não extremo */
-            backdrop-filter: blur(30px);
+            /* BLUR AUMENTADO PARA O MÁXIMO ACEITÁVEL */
+            -webkit-backdrop-filter: blur(70px); 
+            backdrop-filter: blur(70px);
         }
         
         .gp-form-input:focus + .gp-form-label,
@@ -96,7 +91,7 @@
         .gp-form-input:focus {
             outline: none;
             box-shadow: var(--gp-input-focus-shadow);
-            background-color: rgba(0, 0, 0, 0.25); /* Fundo do input um pouco mais escuro/opaco no foco */
+            background-color: rgba(0, 0, 0, 0.25); 
         }
 
         .gp-form-input.has-error {
@@ -146,7 +141,7 @@
 
         .gp-submit-button:disabled {
             background-image: none;
-            background-color: rgba(50,50,50,0.3); /* Fundo desabilitado um pouco mais escuro */
+            background-color: rgba(50,50,50,0.3); 
             color: rgba(224, 224, 224, 0.6);
             cursor: not-allowed;
             box-shadow: none;
@@ -190,7 +185,6 @@
     </div>
 
     <script>
-        // O JavaScript para validação e envio para o webhook permanece o mesmo da versão anterior
         const gpForm = document.getElementById('greatPagesForm');
         const gpFullNameInput = document.getElementById('gpFullName');
         const gpEmailInput = document.getElementById('gpEmail');
