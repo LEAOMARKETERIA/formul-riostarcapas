@@ -9,19 +9,13 @@
 
         :root {
             --gp-primary-color: #FF6B00;
-            --gp-text-color-on-dark-bg: #FFFFFF; /* Para texto em cima de fundos escuros/inputs */
-            --gp-label-placeholder-color: rgba(224, 224, 224, 0.7); /* Cor da label quando age como placeholder */
-            
-            /* Estilo desejado para os inputs (escuro, semi-transparente) */
-            --gp-input-bg-color: rgba(0, 0, 0, 0.25); /* Fundo escuro com mais substância */
-            --gp-input-focus-bg-color: rgba(0, 0, 0, 0.35); /* Um pouco mais escuro no foco */
-            --gp-input-blur-value: 50px; /* Valor alto de blur */
-
-            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.45);
+            --gp-input-text-color: #FFFFFF; 
+            --gp-input-placeholder-color: rgba(224, 224, 224, 0.7);
+            --gp-input-bg-color: rgba(0, 0, 0, 0.15); 
+            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35);
+            --gp-label-color-initial: var(--gp-input-placeholder-color);
             --gp-label-color-float: var(--gp-primary-color);
             --gp-error-color: #FFC2C2; 
-            --gp-error-shadow-color: rgba(255, 100, 100, 0.5);
-
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
             --gp-field-spacing: 8px; 
@@ -43,84 +37,62 @@
             box-sizing: border-box;
         }
 
-        .gp-form-wrapper *,
-        .gp-form-wrapper *::before,
-        .gp-form-wrapper *::after {
+        .gp-form-wrapper * {
             box-sizing: border-box;
         }
 
         .gp-form-group {
             margin-bottom: var(--gp-field-spacing);
-            position: relative; /* Crucial para o posicionamento absoluto da label */
+            position: relative;
         }
 
         .gp-form-label {
             position: absolute;
             left: 17px;
-            /* Posição inicial da label (verticalmente). Deve parecer um placeholder. */
-            top: 50%; 
-            transform: translateY(-50%);
+            top: 16px; 
             font-size: 15px;
-            color: var(--gp-label-placeholder-color);
-            pointer-events: none; /* Para permitir cliques no input abaixo */
+            color: var(--gp-label-color-initial);
+            pointer-events: none;
             transition: all 0.2s ease-out;
-            background-color: transparent; /* Para não interferir com o blur do input */
-            padding: 0 2px; /* Pequeno padding para não colar nas letras */
-            line-height: 1; /* Para controle mais preciso da altura da label */
+            background-color: transparent;
         }
 
         .gp-form-input {
-            /* Reset de aparência para tentar sobrescrever padrões do navegador/plataforma */
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-
             width: 100%;
-            /* Padding precisa ser suficiente para o texto E para a label quando "dentro" */
-            /* O texto vai se alinhar com base no padding e line-height */
-            padding: 16px 16px; /* Aumentado para garantir espaço */
+            padding: 12px 16px;
+            padding-top: 22px;  
+            padding-bottom: 10px; 
             font-size: 15px;
             font-family: var(--gp-font-family);
-            line-height: 1.5; /* Ajuste para alinhar texto verticalmente com label */
-            color: var(--gp-text-color-on-dark-bg);
+            color: var(--gp-input-text-color);
             background-color: var(--gp-input-bg-color); 
-            
             border: none; 
             border-radius: var(--gp-border-radius);
             transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
-            
-            -webkit-backdrop-filter: blur(var(--gp-input-blur-value)); 
-            backdrop-filter: blur(var(--gp-input-blur-value));
+            -webkit-backdrop-filter: blur(70px); 
+            backdrop-filter: blur(70px);
         }
         
-        /* Estado flutuante da label: quando input está focado OU não está mostrando o placeholder CSS */
-        /* (o input DEVE ter placeholder=" " no HTML para :not(:placeholder-shown) funcionar bem) */
         .gp-form-input:focus + .gp-form-label,
         .gp-form-input:not(:placeholder-shown) + .gp-form-label {
-            top: 6px; /* Posição da label acima da linha do texto digitado */
-            transform: translateY(0); /* Remove o transform anterior */
+            top: 4px; 
             font-size: 11px;
             color: var(--gp-label-color-float);
-            /* Opcional: para recortar a borda do input, se houvesse uma:
-            background-color: var(--gp-input-bg-color); /* Ou cor do fundo da página do iframe
-            padding: 0 5px; */
         }
         
         .gp-form-input::placeholder {
-            /* O placeholder real está invisível, a label faz esse papel visualmente */
             color: transparent; 
-            user-select: none; /* Para não ser selecionável */
         }
 
         .gp-form-input:focus {
             outline: none;
             box-shadow: var(--gp-input-focus-shadow);
-            background-color: var(--gp-input-focus-bg-color); 
+            background-color: rgba(0, 0, 0, 0.25); 
         }
 
         .gp-form-input.has-error,
         .gp-form-input[aria-invalid="true"] {
-            box-shadow: 0 0 0 3px var(--gp-error-shadow-color) !important; 
+            box-shadow: 0 0 0 3px rgba(255, 100, 100, 0.4) !important; 
         }
         .gp-form-input.has-error + .gp-form-label,
         .gp-form-input[aria-invalid="true"] + .gp-form-label {
@@ -131,13 +103,12 @@
             display: block;
             color: var(--gp-error-color);
             font-size: 12px;
-            margin-top: 5px; /* Aumentei um pouco para mais respiro */
+            margin-top: 5px;
             min-height: 15px;
             font-weight: 500;
         }
 
         .gp-submit-button {
-            /* ... estilos do botão permanecem os mesmos ... */
             width: 100%;
             padding: 14px 20px; 
             font-size: 16px;
@@ -202,7 +173,7 @@
 
             <div class="gp-form-group">
                 <input type="tel" id="gpWhatsapp" name="whatsapp" class="gp-form-input" placeholder=" " required
-                       aria-describedby="gpWhatsappError" aria-invalid="false">
+                       aria-describedby="gpWhatsappError" aria-invalid="false" maxlength="17"> {/* Maxlength para (XX) 9 XXXX-XXXX */}
                 <label for="gpWhatsapp" class="gp-form-label">WhatsApp</label>
                 <span class="gp-error-message" id="gpWhatsappError" role="alert"></span>
             </div>
@@ -215,7 +186,6 @@
     </div>
 
     <script>
-        // O JavaScript permanece o mesmo da versão anterior
         const gpForm = document.getElementById('greatPagesForm');
         const gpFullNameInput = document.getElementById('gpFullName');
         const gpEmailInput = document.getElementById('gpEmail');
@@ -273,26 +243,52 @@
             gpEmailInput.addEventListener('input', () => gpClearError('gpEmail'));
         }
 
+        // Lógica para Máscara e Validação do WhatsApp
         if (gpWhatsappInput) {
+            gpWhatsappInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, ''); // Remove todos os não-dígitos
+                value = value.substring(0, 11); // Limita a 11 dígitos (DDD + 9 + NÚMERO)
+
+                let maskedValue = '';
+                if (value.length > 0) {
+                    maskedValue = '(' + value.substring(0, Math.min(2, value.length));
+                }
+                if (value.length > 2) {
+                    maskedValue += ') ' + value.substring(2, Math.min(3, value.length)); // O '9'
+                }
+                if (value.length > 3) {
+                    maskedValue += ' ' + value.substring(3, Math.min(7, value.length)); // Primeiros 4 do número XXXX
+                }
+                if (value.length > 7) {
+                    maskedValue += '-' + value.substring(7, Math.min(11, value.length)); // Últimos 4 do número XXXX
+                }
+                e.target.value = maskedValue;
+            });
+
             gpWhatsappInput.addEventListener('blur', () => {
                 const whatsappValue = gpWhatsappInput.value.trim();
-                const phoneRegex = /^[+]?[(]?[0-9]{2}[)]?[-\s.]?[0-9]{4,5}[-\s.]?[0-9]{4}$/im; 
+                const unmaskedValue = whatsappValue.replace(/\D/g, '');
+
                 if (!whatsappValue) { 
                     gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
-                } else if (!phoneRegex.test(whatsappValue)) {
-                    gpShowError('gpWhatsapp', 'Formato de WhatsApp inválido.');
+                } else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) {
+                    // Valida se tem 11 dígitos e o 3º dígito (após DDD) é '9'
+                    gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.');
                 } else {
                     gpClearError('gpWhatsapp');
                 }
             });
-            gpWhatsappInput.addEventListener('input', () => gpClearError('gpWhatsapp'));
+            // Não precisa limpar erro no 'input' aqui, pois a máscara já está formatando.
+            // O erro só será mostrado no 'blur' ou 'submit'.
         }
+
 
         if (gpForm) {
             gpForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 let isValid = true;
 
+                // Validação Nome
                 if (gpFullNameInput) {
                     if (!gpFullNameInput.value.trim()) {
                         gpShowError('gpFullName', 'Nome completo é obrigatório.');
@@ -304,7 +300,7 @@
                         gpClearError('gpFullName');
                     }
                 }
-
+                // Validação Email
                 if (gpEmailInput) {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!gpEmailInput.value.trim()) {
@@ -317,15 +313,15 @@
                         gpClearError('gpEmail');
                     }
                 }
-
+                // Validação WhatsApp
                 if (gpWhatsappInput) {
                     const whatsappValue = gpWhatsappInput.value.trim();
-                    const phoneRegex = /^[+]?[(]?[0-9]{2}[)]?[-\s.]?[0-9]{4,5}[-\s.]?[0-9]{4}$/im;
+                    const unmaskedValue = whatsappValue.replace(/\D/g, '');
                     if (!whatsappValue) { 
                         gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.');
                         isValid = false;
-                    } else if (!phoneRegex.test(whatsappValue)) { 
-                        gpShowError('gpWhatsapp', 'Formato de WhatsApp inválido.');
+                    } else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) { 
+                        gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.');
                         isValid = false;
                     } else {
                         gpClearError('gpWhatsapp');
@@ -333,6 +329,7 @@
                 }
 
                 if (isValid && gpSubmitBtn) {
+                    // ... (resto da lógica de envio para o webhook permanece a mesma) ...
                     gpSubmitBtn.textContent = 'Enviando...';
                     gpSubmitBtn.disabled = true;
                     const originalIcon = gpSubmitBtn.querySelector('.icon');
@@ -341,7 +338,7 @@
                     const formData = {
                         fullName: gpFullNameInput ? gpFullNameInput.value.trim() : '',
                         email: gpEmailInput ? gpEmailInput.value.trim() : '',
-                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : ''
+                        whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : '' // Envia o valor mascarado
                     };
                     const webhookUrl = 'https://leaomarketeria.app.n8n.cloud/webhook-test/receber-lead-catalogo-starcapas';
 
