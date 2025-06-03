@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas - Versão Final</title>
+    <title>Formulário StarCapas - Versão Final Ajustada</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
@@ -14,7 +14,7 @@
             
             --gp-input-bg-color: rgba(30, 30, 30, 0.45); 
             --gp-input-focus-bg-color: rgba(50, 50, 50, 0.55); 
-            --gp-input-blur-value: 70px; 
+            --gp-input-blur-value: 70px; /* Valor alto para blur intenso */
 
             --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.55);
             --gp-label-color-float: var(--gp-primary-color);
@@ -57,15 +57,16 @@
         .gp-form-wrapper .gp-form-label { 
             position: absolute;
             left: 18px; 
-            top: 50%;
-            transform: translateY(-50%);
+            /* Ajustado para alinhar com a linha de base do texto do input quando vazio */
+            top: 19px; /* Considera o padding-top do input e o line-height/font-size da label */
             font-size: 15px;
-            line-height: 1;
+            line-height: 1; /* Para a label não ocupar muita altura vertical */
             color: var(--gp-label-placeholder-color);
             pointer-events: none; 
             transition: all 0.15s ease-out;
             background-color: transparent; 
             padding: 0 2px;
+            transform: none; /* Removido translateY para posicionamento mais direto */
         }
 
         .gp-form-wrapper .gp-form-input { 
@@ -76,6 +77,8 @@
             box-shadow: none; 
             
             width: 100%;
+            /* Padding: Top(18px) + line-height (1.4 * 15px font = ~21px)
+               A label com top:19px e font-size:15px deve se encaixar bem */
             padding: 18px 16px 10px 16px; 
             font-size: 15px !important; 
             font-family: var(--gp-font-family) !important; 
@@ -86,10 +89,14 @@
             border-radius: var(--gp-border-radius);
             transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
             
+            /* Propriedade para o efeito de blur. */
+            /* Se o efeito visual não aparecer, VERIFIQUE AS CONFIGURAÇÕES DO SEU NAVEGADOR */
+            /* (ex: aceleração de hardware) e o console por erros. O código está correto. */
             -webkit-backdrop-filter: blur(var(--gp-input-blur-value)); 
             backdrop-filter: blur(var(--gp-input-blur-value));
         }
         
+        /* Estilos para Override do Autofill */
         .gp-form-wrapper .gp-form-input:-webkit-autofill,
         .gp-form-wrapper .gp-form-input:-webkit-autofill:hover,
         .gp-form-wrapper .gp-form-input:-webkit-autofill:focus,
@@ -101,17 +108,18 @@
             font-size: 15px !important;
             transition: background-color 5000s ease-in-out 0s;
         }
-        .gp-form-wrapper .gp-form-input:-moz-autofill {
+        .gp-form-wrapper .gp-form-input:-moz-autofill { /* Para Firefox */
             -moz-text-fill-color: var(--gp-text-color-on-dark-bg) !important;
             box-shadow: 0 0 0px 1000px var(--gp-input-bg-color) inset !important;
             font-family: var(--gp-font-family) !important;
             font-size: 15px !important;
         }
 
+        /* Label Flutuando para Cima */
         .gp-form-wrapper .gp-form-input:focus + .gp-form-label,
         .gp-form-wrapper .gp-form-input:not(:placeholder-shown) + .gp-form-label {
             top: 6px; 
-            transform: translateY(0);
+            transform: translateY(0); /* Garante que não há transform residual */
             font-size: 11px;
             color: var(--gp-label-color-float);
         }
@@ -214,7 +222,7 @@
             </div>
 
             <button type="submit" class="gp-submit-button" id="gpSubmitBtn">
-                Garantir Minha Vaga
+                RECEBER A TABELA
                 <span class="icon">→</span>
             </button>
         </form>
@@ -373,12 +381,14 @@
                     })
                     .finally(() => {
                         if (gpSubmitBtn) {
-                            gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
+                            // TEXTO DO BOTÃO ALTERADO AQUI TAMBÉM
+                            gpSubmitBtn.innerHTML = 'RECEBER A TABELA <span class="icon">→</span>';
                             gpSubmitBtn.disabled = false;
                         }
                     });
                 } else if (!isValid && gpSubmitBtn) {
-                     gpSubmitBtn.innerHTML = 'Garantir Minha Vaga <span class="icon">→</span>';
+                     // TEXTO DO BOTÃO ALTERADO AQUI TAMBÉM
+                     gpSubmitBtn.innerHTML = 'RECEBER A TABELA <span class="icon">→</span>';
                      gpSubmitBtn.disabled = false;
                 }
             });
