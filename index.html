@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas - Versão Final</title>
+    <title>Formulário StarCapas - Versão Final com Redirecionamento</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
@@ -39,7 +39,7 @@
         .gp-form-wrapper {
             background: transparent; 
             width: 100%;
-            max-width: 540px; 
+            max-width: 380px; 
             margin: 0 auto; 
             padding: 15px; 
             box-sizing: border-box;
@@ -364,24 +364,14 @@
                     })
                     .then(data => {
                         console.log('Sucesso no Webhook:', data);
-                        // O alert foi removido na versão anterior, mantendo assim.
                         gpForm.reset();
                         if (gpFullNameInput) gpClearError('gpFullName');
                         if (gpEmailInput) gpClearError('gpEmail');
                         if (gpWhatsappInput) gpClearError('gpWhatsapp');
                         
-                        // **REDIRECIONAMENTO PARA PÁGINA DE OBRIGADO**
+                        // **URL DA PÁGINA DE OBRIGADO ATUALIZADA**
                         const thankYouPageUrl = 'https://www.podiumrepresentacoes.com.br/obrigado-whatsapp';
-                        // Exemplo: const thankYouPageUrl = 'https://seusite.greatpages.com.br/obrigado';
-                        // Se for um arquivo no mesmo local no GitHub Pages: const thankYouPageUrl = './obrigado.html';
-                        
-                        if (thankYouPageUrl !== 'https://www.podiumrepresentacoes.com.br/obrigado-whatsapp' && thankYouPageUrl !== '') {
-                            window.location.href = thankYouPageUrl;
-                        } else {
-                            // Fallback se a URL não for definida, para evitar erro e apenas dar um alerta.
-                            alert('Inscrição realizada com sucesso! (URL de obrigado não configurada)');
-                            console.warn('URL da página de obrigado não configurada no script.');
-                        }
+                        window.location.href = thankYouPageUrl; 
                     })
                     .catch(error => {
                         console.error('Erro ao enviar para Webhook:', error);
