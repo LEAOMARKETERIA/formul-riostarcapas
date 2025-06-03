@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas - Tema Vermelho</title>
+    <title>Formulário StarCapas - Versão Final com Redirecionamento</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
         :root {
-            /* CORES ALTERADAS PARA VERMELHO VIVO */
-            --gp-primary-color: #FF0000; /* Vermelho Vivo Principal */
-            --gp-primary-darker-red: #D10000; /* Tom de vermelho mais escuro para gradientes/hover */
-
+            --gp-primary-color: #FF0000; 
+            --gp-primary-darker-red: #D10000; 
             --gp-text-color-on-dark-bg: #FFFFFF; 
             --gp-label-placeholder-color: rgba(224, 224, 224, 0.7); 
-            
             --gp-input-bg-color: rgba(30, 30, 30, 0.45); 
             --gp-input-focus-bg-color: rgba(50, 50, 50, 0.55); 
             --gp-input-blur-value: 70px; 
-
-            /* Sombra do foco agora baseada no vermelho */
             --gp-input-focus-shadow: 0 0 0 3px rgba(255, 0, 0, 0.55); 
-            --gp-label-color-float: var(--gp-primary-color); /* Automaticamente vermelho */
-            
+            --gp-label-color-float: var(--gp-primary-color); 
             --gp-error-color: #FFB3B3; 
             --gp-error-shadow-color: rgba(255, 80, 80, 0.6);
-
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
             --gp-field-spacing: 10px; 
@@ -79,7 +72,6 @@
             -moz-appearance: none;
             outline: none;
             box-shadow: none; 
-            
             width: 100%;
             padding: 18px 16px 10px 16px; 
             font-size: 15px !important; 
@@ -90,7 +82,6 @@
             border: none; 
             border-radius: var(--gp-border-radius);
             transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out;
-            
             -webkit-backdrop-filter: blur(var(--gp-input-blur-value)); 
             backdrop-filter: blur(var(--gp-input-blur-value));
         }
@@ -118,7 +109,7 @@
             top: 6px; 
             transform: translateY(0);
             font-size: 11px;
-            color: var(--gp-label-color-float); /* Será vermelho */
+            color: var(--gp-label-color-float); 
         }
         
         .gp-form-wrapper .gp-form-input::placeholder {
@@ -127,7 +118,7 @@
         }
 
         .gp-form-wrapper .gp-form-input:focus {
-            box-shadow: var(--gp-input-focus-shadow) !important; /* Sombra vermelha */
+            box-shadow: var(--gp-input-focus-shadow) !important; 
             background-color: var(--gp-input-focus-bg-color) !important; 
         }
 
@@ -157,7 +148,6 @@
             font-family: var(--gp-font-family);
             font-weight: 600;
             color: #fff;
-            /* Gradiente do botão agora com tons de vermelho */
             background-image: linear-gradient(to right, var(--gp-primary-color) 0%, var(--gp-primary-darker-red) 50%, var(--gp-primary-color) 100%);
             background-size: 200% auto;
             border: none;
@@ -168,14 +158,12 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            /* Sombra do botão agora baseada no vermelho */
             box-shadow: 0 4px 15px 0 rgba(255, 0, 0, 0.3);
             margin-top: 12px; 
         }
 
         .gp-form-wrapper .gp-submit-button:hover {
             background-position: right center;
-            /* Sombra do hover do botão agora baseada no vermelho */
             box-shadow: 0 6px 20px 0 rgba(255, 0, 0, 0.45);
         }
         .gp-form-wrapper .gp-submit-button:active {
@@ -229,9 +217,6 @@
     </div>
 
     <script>
-        // O JavaScript permanece o mesmo da versão anterior.
-        // Apenas o texto do botão no .finally() e no else if(!isValid) foi alterado
-        // na resposta anterior, o que já está refletido aqui.
         const gpForm = document.getElementById('greatPagesForm');
         const gpFullNameInput = document.getElementById('gpFullName');
         const gpEmailInput = document.getElementById('gpEmail');
@@ -330,6 +315,7 @@
                 event.preventDefault();
                 let isValid = true;
 
+                // Validações finais
                 if (gpFullNameInput) { 
                     if (!gpFullNameInput.value.trim()) { gpShowError('gpFullName', 'Nome completo é obrigatório.'); isValid = false; }
                     else if (gpFullNameInput.value.trim().split(' ').length < 2) { gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.'); isValid = false; }
@@ -367,22 +353,33 @@
                         body: JSON.stringify(formData),
                     })
                     .then(response => {
-                        if (response.ok) { return response.text(); }
-                        return response.text().then(text => { throw new Error(`Erro do webhook: ${response.status} ${response.statusText}. Detalhes: ${text}`); });
+                        if (response.ok) { return response.text(); } // Ou response.json() se esperar JSON de volta
+                        // Se não estiver ok, tenta pegar o texto do erro para dar mais detalhes
+                        return response.text().then(text => { 
+                            throw new Error(`Erro do webhook: ${response.status} ${response.statusText}. Detalhes: ${text}`);
+                        });
                     })
                     .then(data => {
                         console.log('Sucesso no Webhook:', data);
-                        alert('Inscrição realizada com sucesso!');
+                        // alert('Inscrição realizada com sucesso!'); // Removido o alerta
                         gpForm.reset();
                         if (gpFullNameInput) gpClearError('gpFullName');
                         if (gpEmailInput) gpClearError('gpEmail');
                         if (gpWhatsappInput) gpClearError('gpWhatsapp');
+                        
+                        // **REDIRECIONAMENTO PARA PÁGINA DE OBRIGADO**
+                        // Substitua 'obrigado.html' pela URL da sua página de obrigado.
+                        // Se for no mesmo diretório do GitHub Pages: './obrigado.html'
+                        // Se for uma URL completa: 'https://seusite.com/obrigado'
+                        window.location.href = 'obrigado.html'; 
                     })
                     .catch(error => {
                         console.error('Erro ao enviar para Webhook:', error);
-                        alert(`Ocorreu um erro ao enviar sua inscrição: ${error.message}. Tente novamente.`);
+                        alert(`Ocorreu um erro ao enviar sua inscrição. ${error.message}. Tente novamente.`);
                     })
                     .finally(() => {
+                        // Mesmo que o redirecionamento ocorra, o botão pode ser resetado
+                        // se o redirecionamento for impedido por algum motivo (ex: pop-up blocker em testes).
                         if (gpSubmitBtn) {
                             gpSubmitBtn.innerHTML = 'RECEBER A TABELA <span class="icon">→</span>';
                             gpSubmitBtn.disabled = false;
