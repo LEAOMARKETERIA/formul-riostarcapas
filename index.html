@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas - Final</title>
+    <title>Formulário StarCapas - Versão Final</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
@@ -12,28 +12,26 @@
             --gp-text-color-on-dark-bg: #FFFFFF; 
             --gp-label-placeholder-color: rgba(224, 224, 224, 0.7); 
             
-            /* Estilo glassmorphism escuro para inputs */
-            --gp-input-bg-color: rgba(30, 30, 30, 0.45); /* Tom escuro, boa transparência */
-            --gp-input-focus-bg-color: rgba(50, 50, 50, 0.55); /* Um pouco mais opaco no foco */
-            --gp-input-blur-value: 70px; /* Blur alto */
+            --gp-input-bg-color: rgba(30, 30, 30, 0.45); 
+            --gp-input-focus-bg-color: rgba(50, 50, 50, 0.55); 
+            --gp-input-blur-value: 70px; 
 
-            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.55); /* Sombra do foco mais visível */
+            --gp-input-focus-shadow: 0 0 0 3px rgba(255, 107, 0, 0.55);
             --gp-label-color-float: var(--gp-primary-color);
-            --gp-error-color: #FFB3B3; /* Ajustado para melhor contraste em fundo escuro */
+            --gp-error-color: #FFB3B3; 
             --gp-error-shadow-color: rgba(255, 80, 80, 0.6);
 
             --gp-font-family: 'Montserrat', sans-serif;
             --gp-border-radius: 10px;
-            --gp-field-spacing: 10px; /* Espaçamento entre campos um pouco maior que 8px */
+            --gp-field-spacing: 10px; 
         }
 
-        /* Reset básico e configuração do body para o iframe */
         html, body {
             background: transparent !important;
             margin: 0;
             padding: 0;
             font-family: var(--gp-font-family);
-            color: var(--gp-text-color-on-dark-bg); /* Cor de texto padrão clara se o fundo do GreatPages for escuro */
+            color: var(--gp-text-color-on-dark-bg); 
         }
 
         .gp-form-wrapper {
@@ -41,7 +39,7 @@
             width: 100%;
             max-width: 380px; 
             margin: 0 auto; 
-            padding: 15px; /* Um pouco mais de padding no wrapper */
+            padding: 15px; 
             box-sizing: border-box;
         }
 
@@ -56,24 +54,21 @@
             position: relative; 
         }
 
-        /* Estilos da Label Flutuante */
-        .gp-form-wrapper .gp-form-label { /* Maior especificidade */
+        .gp-form-wrapper .gp-form-label { 
             position: absolute;
-            left: 18px; /* Alinhado com padding do input */
+            left: 18px; 
             top: 50%;
             transform: translateY(-50%);
             font-size: 15px;
             line-height: 1;
             color: var(--gp-label-placeholder-color);
-            pointer-events: none;
+            pointer-events: none; 
             transition: all 0.15s ease-out;
             background-color: transparent; 
             padding: 0 2px;
         }
 
-        /* Estilos do Input */
-        .gp-form-wrapper .gp-form-input { /* Maior especificidade */
-            /* Reset explícito de aparência */
+        .gp-form-wrapper .gp-form-input { 
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -81,12 +76,11 @@
             box-shadow: none; 
             
             width: 100%;
-            /* Padding: Top precisa de espaço para label inicial, Bottom para altura, L/R para texto */
-            padding: 18px 16px 10px 16px; /* Ex: 18px no topo, 10px embaixo, 16px laterais */
-            font-size: 15px;
-            font-family: var(--gp-font-family);
+            padding: 18px 16px 10px 16px; 
+            font-size: 15px !important; 
+            font-family: var(--gp-font-family) !important; 
             line-height: 1.4; 
-            color: var(--gp-text-color-on-dark-bg);
+            color: var(--gp-text-color-on-dark-bg) !important; 
             background-color: var(--gp-input-bg-color); 
             border: none; 
             border-radius: var(--gp-border-radius);
@@ -96,15 +90,30 @@
             backdrop-filter: blur(var(--gp-input-blur-value));
         }
         
-        /* Label Flutuando para Cima */
+        .gp-form-wrapper .gp-form-input:-webkit-autofill,
+        .gp-form-wrapper .gp-form-input:-webkit-autofill:hover,
+        .gp-form-wrapper .gp-form-input:-webkit-autofill:focus,
+        .gp-form-wrapper .gp-form-input:-webkit-autofill:active {
+            -webkit-text-fill-color: var(--gp-text-color-on-dark-bg) !important;
+            box-shadow: 0 0 0px 1000px var(--gp-input-bg-color) inset !important;
+            -webkit-box-shadow: 0 0 0px 1000px var(--gp-input-bg-color) inset !important; 
+            font-family: var(--gp-font-family) !important;
+            font-size: 15px !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        .gp-form-wrapper .gp-form-input:-moz-autofill {
+            -moz-text-fill-color: var(--gp-text-color-on-dark-bg) !important;
+            box-shadow: 0 0 0px 1000px var(--gp-input-bg-color) inset !important;
+            font-family: var(--gp-font-family) !important;
+            font-size: 15px !important;
+        }
+
         .gp-form-wrapper .gp-form-input:focus + .gp-form-label,
         .gp-form-wrapper .gp-form-input:not(:placeholder-shown) + .gp-form-label {
-            top: 6px; /* Posição da label acima, dentro do padding-top do input */
+            top: 6px; 
             transform: translateY(0);
             font-size: 11px;
             color: var(--gp-label-color-float);
-            /* Para a label "recortar" o fundo se necessário (se o input tivesse borda visível) */
-            /* background-color: var(--gp-input-bg-color); */ 
         }
         
         .gp-form-wrapper .gp-form-input::placeholder {
@@ -112,10 +121,9 @@
             user-select: none;
         }
 
-        /* Estilos de Foco e Erro */
         .gp-form-wrapper .gp-form-input:focus {
-            box-shadow: var(--gp-input-focus-shadow);
-            background-color: var(--gp-input-focus-bg-color); 
+            box-shadow: var(--gp-input-focus-shadow) !important; 
+            background-color: var(--gp-input-focus-bg-color) !important; 
         }
 
         .gp-form-wrapper .gp-form-input.has-error,
@@ -131,16 +139,15 @@
             display: block;
             color: var(--gp-error-color);
             font-size: 12px;
-            margin-top: 6px; /* Mais espaço para a mensagem de erro */
+            margin-top: 6px;
             min-height: 15px;
             font-weight: 500;
-            padding-left: 2px; /* Pequeno recuo */
+            padding-left: 2px;
         }
 
-        /* Botão de Submissão */
         .gp-form-wrapper .gp-submit-button {
             width: 100%;
-            padding: 15px 20px; /* Botão um pouco mais alto */
+            padding: 15px 20px; 
             font-size: 16px;
             font-family: var(--gp-font-family);
             font-weight: 600;
@@ -214,7 +221,6 @@
     </div>
 
     <script>
-        // O JavaScript permanece o mesmo da versão anterior para validação, máscara e envio.
         const gpForm = document.getElementById('greatPagesForm');
         const gpFullNameInput = document.getElementById('gpFullName');
         const gpEmailInput = document.getElementById('gpEmail');
@@ -313,19 +319,18 @@
                 event.preventDefault();
                 let isValid = true;
 
-                // Validações (repetidas para garantir antes do submit)
-                if (gpFullNameInput) { /* ... lógica de validação ... */ 
+                if (gpFullNameInput) { 
                     if (!gpFullNameInput.value.trim()) { gpShowError('gpFullName', 'Nome completo é obrigatório.'); isValid = false; }
                     else if (gpFullNameInput.value.trim().split(' ').length < 2) { gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.'); isValid = false; }
                     else { gpClearError('gpFullName'); }
                 }
-                if (gpEmailInput) { /* ... lógica de validação ... */ 
+                if (gpEmailInput) { 
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!gpEmailInput.value.trim()) { gpShowError('gpEmail', 'E-mail é obrigatório.'); isValid = false; }
                     else if (!emailRegex.test(gpEmailInput.value.trim())) { gpShowError('gpEmail', 'Formato de e-mail inválido.'); isValid = false; }
                     else { gpClearError('gpEmail'); }
                 }
-                if (gpWhatsappInput) { /* ... lógica de validação ... */
+                if (gpWhatsappInput) { 
                     const whatsappValue = gpWhatsappInput.value.trim(); const unmaskedValue = whatsappValue.replace(/\D/g, '');
                     if (!whatsappValue) { gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.'); isValid = false; }
                     else if (unmaskedValue.length !== 11 || (unmaskedValue.length === 11 && unmaskedValue.charAt(2) !== '9')) { gpShowError('gpWhatsapp', 'Formato inválido. Use (XX) 9 XXXX-XXXX.'); isValid = false; }
