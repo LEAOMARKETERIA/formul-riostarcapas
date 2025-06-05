@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário StarCapas - Versão Final com Redirecionamento</title>
+    <title>Formulário StarCapas - Final com Primeiro Nome</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
@@ -39,7 +39,7 @@
         .gp-form-wrapper {
             background: transparent; 
             width: 100%;
-            max-width: 540px; 
+            max-width: 380px; 
             margin: 0 auto; 
             padding: 15px; 
             box-sizing: border-box;
@@ -195,10 +195,10 @@
     <div class="gp-form-wrapper">
         <form id="greatPagesForm" novalidate>
             <div class="gp-form-group">
-                <input type="text" id="gpFullName" name="fullName" class="gp-form-input" placeholder=" " required 
-                       aria-describedby="gpFullNameError" aria-invalid="false">
-                <label for="gpFullName" class="gp-form-label">Nome Completo</label>
-                <span class="gp-error-message" id="gpFullNameError" role="alert"></span>
+                <input type="text" id="gpFirstName" name="firstName" class="gp-form-input" placeholder=" " required 
+                       aria-describedby="gpFirstNameError" aria-invalid="false">
+                <label for="gpFirstName" class="gp-form-label">Primeiro Nome</label>
+                <span class="gp-error-message" id="gpFirstNameError" role="alert"></span>
             </div>
 
             <div class="gp-form-group">
@@ -224,7 +224,8 @@
 
     <script>
         const gpForm = document.getElementById('greatPagesForm');
-        const gpFullNameInput = document.getElementById('gpFullName');
+        // Variável e ID alterados para gpFirstNameInput / gpFirstName
+        const gpFirstNameInput = document.getElementById('gpFirstName'); 
         const gpEmailInput = document.getElementById('gpEmail');
         const gpWhatsappInput = document.getElementById('gpWhatsapp');
         const gpSubmitBtn = document.getElementById('gpSubmitBtn');
@@ -253,17 +254,16 @@
             }
         }
 
-        if (gpFullNameInput) {
-            gpFullNameInput.addEventListener('blur', () => {
-                if (!gpFullNameInput.value.trim()) {
-                    gpShowError('gpFullName', 'Nome completo é obrigatório.');
-                } else if (gpFullNameInput.value.trim().split(' ').length < 2 && gpFullNameInput.value.trim().length > 0) {
-                    gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.');
+        // Validação para Primeiro Nome
+        if (gpFirstNameInput) {
+            gpFirstNameInput.addEventListener('blur', () => {
+                if (!gpFirstNameInput.value.trim()) {
+                    gpShowError('gpFirstName', 'Primeiro nome é obrigatório.');
                 } else {
-                    gpClearError('gpFullName');
+                    gpClearError('gpFirstName');
                 }
             });
-            gpFullNameInput.addEventListener('input', () => gpClearError('gpFullName'));
+            gpFirstNameInput.addEventListener('input', () => gpClearError('gpFirstName'));
         }
 
         if (gpEmailInput) {
@@ -321,18 +321,23 @@
                 event.preventDefault();
                 let isValid = true;
 
-                // Validações finais
-                if (gpFullNameInput) { 
-                    if (!gpFullNameInput.value.trim()) { gpShowError('gpFullName', 'Nome completo é obrigatório.'); isValid = false; }
-                    else if (gpFullNameInput.value.trim().split(' ').length < 2) { gpShowError('gpFullName', 'Por favor, insira nome e sobrenome.'); isValid = false; }
-                    else { gpClearError('gpFullName'); }
+                // Validação final para Primeiro Nome
+                if (gpFirstNameInput) { 
+                    if (!gpFirstNameInput.value.trim()) { 
+                        gpShowError('gpFirstName', 'Primeiro nome é obrigatório.'); 
+                        isValid = false; 
+                    } else { 
+                        gpClearError('gpFirstName'); 
+                    }
                 }
+                // Validação Email
                 if (gpEmailInput) { 
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!gpEmailInput.value.trim()) { gpShowError('gpEmail', 'E-mail é obrigatório.'); isValid = false; }
                     else if (!emailRegex.test(gpEmailInput.value.trim())) { gpShowError('gpEmail', 'Formato de e-mail inválido.'); isValid = false; }
                     else { gpClearError('gpEmail'); }
                 }
+                // Validação WhatsApp
                 if (gpWhatsappInput) { 
                     const whatsappValue = gpWhatsappInput.value.trim(); const unmaskedValue = whatsappValue.replace(/\D/g, '');
                     if (!whatsappValue) { gpShowError('gpWhatsapp', 'WhatsApp é obrigatório.'); isValid = false; }
@@ -347,7 +352,8 @@
                     if(originalIcon) originalIcon.style.display = 'none';
 
                     const formData = {
-                        fullName: gpFullNameInput ? gpFullNameInput.value.trim() : '',
+                        // Chave alterada para firstName
+                        firstName: gpFirstNameInput ? gpFirstNameInput.value.trim() : '', 
                         email: gpEmailInput ? gpEmailInput.value.trim() : '',
                         whatsapp: gpWhatsappInput ? gpWhatsappInput.value.trim() : ''
                     };
@@ -365,11 +371,10 @@
                     .then(data => {
                         console.log('Sucesso no Webhook:', data);
                         gpForm.reset();
-                        if (gpFullNameInput) gpClearError('gpFullName');
+                        if (gpFirstNameInput) gpClearError('gpFirstName'); // Limpa erro do novo campo
                         if (gpEmailInput) gpClearError('gpEmail');
                         if (gpWhatsappInput) gpClearError('gpWhatsapp');
                         
-                        // **URL DA PÁGINA DE OBRIGADO ATUALIZADA**
                         const thankYouPageUrl = 'https://www.podiumrepresentacoes.com.br/obrigado-whatsapp';
                         window.location.href = thankYouPageUrl; 
                     })
